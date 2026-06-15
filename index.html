@@ -416,7 +416,7 @@ p { text-wrap: pretty; }
 
 /* ---------- Documents (раздел документы) ---------- */
 .docs-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 22px;
   margin-top: clamp(34px, 5vw, 52px);
 }
 .doc-card {
@@ -1266,6 +1266,21 @@ p { text-wrap: pretty; }
       <p class="lead">Мы работаем открыто. Здесь собраны учредительные и регистрационные документы АНО «Наше будущее» — их можно посмотреть или скачать.</p>
     </div>
     <div class="docs-grid reveal">
+      <article class="doc-card">
+        <div class="doc-preview">
+          <span class="doc-type">ФОТО</span>
+          <img src="docs/foto-zdaniya.jpg" alt="Детский центр «Наше будущее» — вход" loading="lazy">
+          <button class="doc-zoom" type="button" data-img="docs/foto-zdaniya.jpg" aria-label="Открыть изображение"><svg><use href="#i-expand"/></svg></button>
+        </div>
+        <div class="doc-body">
+          <h3>Фото центра</h3>
+          <p>Вход в детский духовно-развивающий центр «Наше будущее».</p>
+          <div class="doc-actions">
+            <button class="doc-btn doc-btn--primary" type="button" data-img="docs/foto-zdaniya.jpg"><svg><use href="#i-expand"/></svg>Смотреть</button>
+            <a class="doc-btn" href="docs/foto-zdaniya.jpg" download><svg><use href="#i-download"/></svg>Скачать</a>
+          </div>
+        </div>
+      </article>
       <article class="doc-card">
         <div class="doc-preview">
           <span class="doc-type">JPG</span>
