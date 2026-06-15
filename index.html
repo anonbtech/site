@@ -414,6 +414,66 @@ p { text-wrap: pretty; }
 .gallery-item video { background: #0b1220; aspect-ratio: 9 / 16; object-fit: cover; cursor: pointer; }
 @media (max-width: 600px) { .gallery-grid { grid-template-columns: 1fr; max-width: 420px; margin-inline: auto; } }
 
+/* ---------- Documents (раздел документы) ---------- */
+.docs-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+  margin-top: clamp(34px, 5vw, 52px);
+}
+.doc-card {
+  display: flex; flex-direction: column; overflow: hidden;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm); transition: transform .2s ease, box-shadow .25s, border-color .25s;
+}
+.doc-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: var(--accent); }
+.doc-preview {
+  position: relative; aspect-ratio: 4/3; background: var(--surface-2);
+  display: grid; place-items: center; overflow: hidden; border-bottom: 1px solid var(--line);
+}
+.doc-preview img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+.doc-preview.is-pdf { background: var(--accent-soft); }
+.doc-preview.is-pdf svg { width: 64px; height: 64px; color: var(--accent); }
+.doc-type {
+  position: absolute; top: 12px; left: 12px; z-index: 2;
+  font-family: var(--font-display); font-weight: 600; font-size: .72rem; letter-spacing: .04em;
+  padding: 4px 10px; border-radius: var(--pill); background: var(--surface); color: var(--accent-ink);
+  border: 1px solid var(--line-2); box-shadow: var(--shadow-sm);
+}
+.doc-zoom {
+  position: absolute; inset: 0; z-index: 1; border: 0; background: transparent; cursor: zoom-in;
+  display: grid; place-items: center; color: #fff; opacity: 0; transition: opacity .2s;
+}
+.doc-zoom::before { content: ""; position: absolute; inset: 0; background: rgba(11,18,32,.35); }
+.doc-zoom svg { position: relative; width: 30px; height: 30px; }
+.doc-preview:hover .doc-zoom { opacity: 1; }
+.doc-body { padding: 20px 22px 22px; display: flex; flex-direction: column; flex: 1; }
+.doc-body h3 { font-size: 1.05rem; margin-bottom: 6px; }
+.doc-body p { color: var(--muted); font-size: .92rem; flex: 1; }
+.doc-actions { display: flex; gap: 10px; margin-top: 18px; }
+.doc-btn {
+  flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--font-display); font-weight: 600; font-size: .9rem; padding: 11px 14px;
+  border-radius: var(--r); border: 1px solid var(--line-2); background: var(--surface); color: var(--ink);
+  cursor: pointer; transition: background .2s, color .2s, border-color .2s;
+}
+.doc-btn svg { width: 17px; height: 17px; }
+.doc-btn:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-ink); }
+.doc-btn--primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.doc-btn--primary:hover { background: var(--accent-ink); border-color: var(--accent-ink); color: #fff; }
+@media (max-width: 860px) { .docs-grid { grid-template-columns: 1fr; max-width: 460px; margin-inline: auto; } }
+
+/* lightbox for document images */
+.lightbox {
+  position: fixed; inset: 0; z-index: 200; display: none; place-items: center;
+  background: rgba(11,18,32,.86); padding: 4vw; backdrop-filter: blur(2px);
+}
+.lightbox.open { display: grid; }
+.lightbox img { max-width: 100%; max-height: 90vh; border-radius: var(--r); box-shadow: var(--shadow-lg); }
+.lightbox-close {
+  position: absolute; top: 20px; right: 20px; width: 48px; height: 48px; border-radius: 50%;
+  border: 0; background: rgba(255,255,255,.14); color: #fff; cursor: pointer; display: grid; place-items: center;
+}
+.lightbox-close svg { width: 22px; height: 22px; }
+
 /* ============================================================
    MARQUEE / trust strip
    ============================================================ */
@@ -786,6 +846,10 @@ p { text-wrap: pretty; }
     <symbol id="i-tg" viewBox="0 0 24 24"><path d="M21.8 4.3 2.9 11.6c-1.1.4-1.1 1.1-.2 1.4l4.8 1.5 1.8 5.7c.3.6.4.9 1 .9.6 0 .8-.3 1.1-.6l2.3-2.2 4.8 3.6c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.5-1.9-1.3-1.4Z" fill="currentColor"/></symbol>
     <symbol id="i-wa" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2Zm0 2a8 8 0 0 1 6.7 12.3l-.3.5.7 2.6-2.6-.7-.5.3A8 8 0 1 1 12 4Zm-3 3.5c-.3 0-.7.1-1 .5-.3.4-1 1-1 2.4 0 1.5 1 2.9 1.2 3.1.2.2 2.1 3.4 5.3 4.6 2.6 1 3.1.8 3.7.8.6-.1 1.8-.8 2.1-1.5.3-.7.3-1.3.2-1.5-.1-.1-.4-.2-.8-.4-.4-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.1-.2.2-.3.2-.7.1-.4-.2-1.4-.6-2.6-1.6-1-.9-1.6-1.9-1.8-2.3-.2-.3 0-.5.1-.7.2-.2.4-.4.5-.6.2-.2.2-.4.4-.6.1-.2 0-.5 0-.7-.1-.2-.7-1.7-1-2.3-.2-.5-.5-.5-.7-.5h-.6Z" fill="currentColor"/></symbol>
     <symbol id="i-vk" viewBox="0 0 24 24"><path d="M13 18c-5.2 0-8.6-3.7-8.7-9.9H7c.1 4.6 2.2 6.5 3.8 6.9V8.1h2.5v3.8c1.6-.2 3.2-2 3.8-3.8h2.5c-.5 2.2-2 4-3.1 4.7 1.1.6 2.9 2.2 3.6 4.2h-2.8c-.5-1.6-2-2.8-3.6-3v3H13Z" fill="currentColor"/></symbol>
+    <!-- documents -->
+    <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H5a1 1 0 0 0-1 1v4M15 4h4a1 1 0 0 1 1 1v4M9 20H5a1 1 0 0 1-1-1v-4M15 20h4a1 1 0 0 0 1-1v-4"/></symbol>
   </defs>
 </svg>
 
@@ -802,6 +866,7 @@ p { text-wrap: pretty; }
       <a href="#reviews">Отзывы</a>
       <a href="#gallery">Галерея</a>
       <a href="#faq">Вопросы</a>
+      <a href="#docs">Документы</a>
       <a href="#contacts">Контакты</a>
     </nav>
     <div class="nav-actions">
@@ -819,6 +884,7 @@ p { text-wrap: pretty; }
   <a href="#reviews">Отзывы</a>
   <a href="#gallery">Галерея</a>
   <a href="#faq">Вопросы</a>
+  <a href="#docs">Документы</a>
   <a href="#contacts">Контакты</a>
   <a href="#apply" class="btn">Записаться</a>
 </div>
@@ -939,7 +1005,7 @@ p { text-wrap: pretty; }
       <article class="prog-card c-green reveal">
         <div class="prog-ico"><svg><use href="#i-quran"/></svg></div>
         <h3>Арабский язык</h3>
-        <p>Чтение Корана, правила и письмо. Закладываем основы языка с уважением к традиции.</p>
+        <p>Чтение Корана, правила и письмо. Закладываем основы языка с уважением к традиции. Занятия проводятся в ММРО «Фатых».</p>
       </article>
       <article class="prog-card c-pink reveal">
         <div class="prog-ico"><svg><use href="#i-globe"/></svg></div>
@@ -1191,6 +1257,63 @@ p { text-wrap: pretty; }
   </div>
 </section>
 
+<!-- ============ DOCUMENTS ============ -->
+<section class="section section--tint" id="docs">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow"><svg class="spark"><use href="#i-spark"/></svg>Документы</span>
+      <h2>Официальные документы центра</h2>
+      <p class="lead">Мы работаем открыто. Здесь собраны учредительные и регистрационные документы АНО «Наше будущее» — их можно посмотреть или скачать.</p>
+    </div>
+    <div class="docs-grid reveal">
+      <article class="doc-card">
+        <div class="doc-preview">
+          <span class="doc-type">JPG</span>
+          <img src="docs/svidetelstvo-registraciya.jpg" alt="Свидетельство о государственной регистрации НКО" loading="lazy">
+          <button class="doc-zoom" type="button" data-img="docs/svidetelstvo-registraciya.jpg" aria-label="Открыть изображение"><svg><use href="#i-expand"/></svg></button>
+        </div>
+        <div class="doc-body">
+          <h3>Свидетельство о регистрации НКО</h3>
+          <p>Свидетельство о государственной регистрации некоммерческой организации, выданное Минюстом РФ.</p>
+          <div class="doc-actions">
+            <button class="doc-btn doc-btn--primary" type="button" data-img="docs/svidetelstvo-registraciya.jpg"><svg><use href="#i-expand"/></svg>Смотреть</button>
+            <a class="doc-btn" href="docs/svidetelstvo-registraciya.jpg" download><svg><use href="#i-download"/></svg>Скачать</a>
+          </div>
+        </div>
+      </article>
+      <article class="doc-card">
+        <div class="doc-preview">
+          <span class="doc-type">JPG</span>
+          <img src="docs/svidetelstvo-fns.jpg" alt="Свидетельство о постановке на учёт в налоговом органе" loading="lazy">
+          <button class="doc-zoom" type="button" data-img="docs/svidetelstvo-fns.jpg" aria-label="Открыть изображение"><svg><use href="#i-expand"/></svg></button>
+        </div>
+        <div class="doc-body">
+          <h3>Свидетельство ФНС (ИНН)</h3>
+          <p>Свидетельство о постановке на учёт российской организации в налоговом органе по месту нахождения.</p>
+          <div class="doc-actions">
+            <button class="doc-btn doc-btn--primary" type="button" data-img="docs/svidetelstvo-fns.jpg"><svg><use href="#i-expand"/></svg>Смотреть</button>
+            <a class="doc-btn" href="docs/svidetelstvo-fns.jpg" download><svg><use href="#i-download"/></svg>Скачать</a>
+          </div>
+        </div>
+      </article>
+      <article class="doc-card">
+        <div class="doc-preview is-pdf">
+          <span class="doc-type">PDF</span>
+          <svg><use href="#i-doc"/></svg>
+        </div>
+        <div class="doc-body">
+          <h3>Договор оферты</h3>
+          <p>Публичная оферта на оказание услуг центра. Открывается в новой вкладке.</p>
+          <div class="doc-actions">
+            <a class="doc-btn doc-btn--primary" href="docs/dogovor-oferty.pdf" target="_blank" rel="noopener"><svg><use href="#i-doc"/></svg>Открыть</a>
+            <a class="doc-btn" href="docs/dogovor-oferty.pdf" download><svg><use href="#i-download"/></svg>Скачать</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
 <!-- ============ CONTACTS ============ -->
 <section class="section" id="contacts">
   <div class="wrap">
@@ -1235,6 +1358,7 @@ p { text-wrap: pretty; }
           <li><a href="#why">Почему мы</a></li>
           <li><a href="#values">Ценности</a></li>
           <li><a href="#reviews">Отзывы</a></li>
+          <li><a href="#docs">Документы</a></li>
         </ul>
       </div>
       <div class="foot-col">
@@ -1266,6 +1390,12 @@ p { text-wrap: pretty; }
     </div>
   </div>
 </footer>
+
+<!-- lightbox для просмотра документов-изображений -->
+<div class="lightbox" id="docLightbox" aria-hidden="true">
+  <button class="lightbox-close" id="docLightboxClose" type="button" aria-label="Закрыть"><svg><use href="#i-close"/></svg></button>
+  <img id="docLightboxImg" src="" alt="Просмотр документа">
+</div>
 
 <script>
 /* НАШЕ БУДУЩЕЕ — интерактив лендинга */
@@ -1387,6 +1517,31 @@ p { text-wrap: pretty; }
       form.style.display = '';
       form.name.focus();
     });
+  }
+
+  /* ---------- documents lightbox ---------- */
+  const lb = document.getElementById('docLightbox');
+  if (lb) {
+    const lbImg = document.getElementById('docLightboxImg');
+    const lbClose = document.getElementById('docLightboxClose');
+    const openLb = (src) => {
+      lbImg.src = src;
+      lb.classList.add('open');
+      lb.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('menu-open');
+    };
+    const closeLb = () => {
+      lb.classList.remove('open');
+      lb.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('menu-open');
+      lbImg.src = '';
+    };
+    document.querySelectorAll('[data-img]').forEach((el) => {
+      el.addEventListener('click', () => openLb(el.getAttribute('data-img')));
+    });
+    lbClose.addEventListener('click', closeLb);
+    lb.addEventListener('click', (e) => { if (e.target === lb) closeLb(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lb.classList.contains('open')) closeLb(); });
   }
 })();
 
