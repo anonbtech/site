@@ -448,13 +448,15 @@ p { text-wrap: pretty; }
 .doc-body { padding: 20px 22px 22px; display: flex; flex-direction: column; flex: 1; }
 .doc-body h3 { font-size: 1.05rem; margin-bottom: 6px; }
 .doc-body p { color: var(--muted); font-size: .92rem; flex: 1; }
-.doc-actions { display: flex; gap: 10px; margin-top: 18px; }
+.doc-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
 .doc-btn {
-  flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  font-family: var(--font-display); font-weight: 600; font-size: .9rem; padding: 11px 14px;
+  flex: 1 1 0; min-width: 0; white-space: nowrap; box-sizing: border-box;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--font-display); font-weight: 600; font-size: .9rem; padding: 11px 12px;
   border-radius: var(--r); border: 1px solid var(--line-2); background: var(--surface); color: var(--ink);
   cursor: pointer; transition: background .2s, color .2s, border-color .2s;
 }
+.doc-btn svg { flex: none; }
 .doc-btn svg { width: 17px; height: 17px; }
 .doc-btn:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-ink); }
 .doc-btn--primary { background: var(--accent); color: #fff; border-color: var(--accent); }
